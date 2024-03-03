@@ -5,7 +5,7 @@ import { Row } from "react-bootstrap";
 
 export const TodoList = () => {
   const { todo, getTodo } = useTodo();
-  // console.log(task);
+  
   useEffect(() => {
     getTodo();
   }, []);
@@ -20,6 +20,7 @@ export const TodoList = () => {
               id={todos.id}
               titulo={todos.titulo}
               contenido={todos.contenido}
+              done={ todos.done }
             />
           );
         })}

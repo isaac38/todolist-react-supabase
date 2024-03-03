@@ -40,7 +40,7 @@ export const TodoContextProvider = ({ children }) => {
           user_id: user.id,
         })
         .select();
-      setTodo([ ...todo, ...data ]);
+      setTodo([...todo, ...data]);
     } catch (error) {
       console.error(error);
     }
@@ -56,9 +56,17 @@ export const TodoContextProvider = ({ children }) => {
     }
   };
 
-  const updateTodo = () => {
-    console.log('hola');
-  }
+  const updateDoneTodo = async (id) => {
+    try {
+      const { data, error } = await supabase
+        .from("todolist")
+        .update({ done: true })
+        .eq("id", id)
+        .select();
+    } catch (error) {
+      error.log(error);
+    }
+  };
 
   return (
     <TodoContext.Provider
@@ -67,7 +75,7 @@ export const TodoContextProvider = ({ children }) => {
         getTodo,
         createTodo,
         deleteTodo,
-        updateTodo
+        updateDoneTodo
       }}
     >
       {children}
