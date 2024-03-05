@@ -11,6 +11,7 @@ export const useTodo = () => {
 
 export const TodoContextProvider = ({ children }) => {
   const [todo, setTodo] = useState([]);
+  const [oneTodo, setOneTodo] = useState([]);
 
   const getTodo = async () => {
     const {
@@ -20,7 +21,7 @@ export const TodoContextProvider = ({ children }) => {
       .from("todolist")
       .select()
       .eq("user_id", user.id);
-      setTodo(data);
+    setTodo(data);
 
     if (error) {
       throw error;
@@ -68,6 +69,18 @@ export const TodoContextProvider = ({ children }) => {
     }
   };
 
+  const viewTodo = async (id) => {
+    try {
+      const { data: todolist, error } = await supabase
+        .from("todolist")
+        .select()
+        .eq("id", id);
+      setOneTodo(todolist[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TodoContext.Provider
       value={{
@@ -75,7 +88,10 @@ export const TodoContextProvider = ({ children }) => {
         getTodo,
         createTodo,
         deleteTodo,
-        updateDoneTodo
+        updateDoneTodo,
+        viewTodo,
+        oneTodo,
+        setOneTodo
       }}
     >
       {children}
