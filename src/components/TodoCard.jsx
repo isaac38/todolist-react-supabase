@@ -4,17 +4,7 @@ import { useTodo } from "../context/TodoContext";
 import { TodoUpdateForm } from "./TodoUpdateForm";
 
 export const TodoCard = ({ id, titulo, contenido, done }) => {
-  const { deleteTodo, updateDoneTodo, viewTodo, oneTodo } = useTodo();
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleViewTodo = (id) => {
-    viewTodo(id);
-    handleShow();
-  };
+  const { deleteTodo, updateStatusTodo } = useTodo();
 
   const [doneState, setDoneState] = useState(done);
 
@@ -23,7 +13,7 @@ export const TodoCard = ({ id, titulo, contenido, done }) => {
   };
 
   const handleUpdateDoneTodo = (id) => {
-    updateDoneTodo(id);
+    updateStatusTodo(id);
     setDoneState(true);
   };
 
@@ -33,7 +23,11 @@ export const TodoCard = ({ id, titulo, contenido, done }) => {
         <Card.Body>
           <div className="d-flex justify-content-between">
             <Card.Title>{titulo}</Card.Title>
-            <TodoUpdateForm id={id} />
+            <TodoUpdateForm 
+              id={id} 
+              titulo={titulo} 
+              contenido={contenido} 
+            />
           </div>
           <Card.Text>{contenido}</Card.Text>
           <div className="d-flex justify-content-end">
