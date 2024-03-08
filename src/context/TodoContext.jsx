@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../api/client";
 
 export const TodoContext = createContext();
@@ -11,7 +11,6 @@ export const useTodo = () => {
 
 export const TodoContextProvider = ({ children }) => {
   const [todo, setTodo] = useState([]);
-  const [oneTodo, setOneTodo] = useState([]);
 
   const getTodo = async () => {
     const {
@@ -57,7 +56,7 @@ export const TodoContextProvider = ({ children }) => {
     }
   };
 
-  const updateDoneTodo = async (id) => {
+  const updateStatusTodo = async (id) => {
     try {
       const { data, error } = await supabase
         .from("todolist")
@@ -69,13 +68,32 @@ export const TodoContextProvider = ({ children }) => {
     }
   };
 
-  const viewTodo = async (id) => {
+  const updateTodo = async (id, titulo, contenido) => {
     try {
-      const { data: todolist, error } = await supabase
+      const { data, error } = await supabase
         .from("todolist")
-        .select()
-        .eq("id", id);
-      setOneTodo(todolist[0]);
+        .update({ 
+          "titulo": titulo, 
+          "contenido": contenido 
+        })
+        .eq("id", id)
+        .select();
+        // console.log(todo);
+        // console.log(data);
+
+        // const todoFind = todo.find(item => item.id == data[0].id)
+
+        // console.log(todoFind);
+
+        todo.map((items) => {
+          if (items.id == data[0].id) {
+            items.titulo = data[0].titulo
+            items.contenido = data[0].contenido
+          }
+        })
+
+        getTodo(todo)
+
     } catch (error) {
       console.log(error);
     }
@@ -88,10 +106,8 @@ export const TodoContextProvider = ({ children }) => {
         getTodo,
         createTodo,
         deleteTodo,
-        updateDoneTodo,
-        viewTodo,
-        oneTodo,
-        setOneTodo
+        updateStatusTodo,
+        updateTodo,
       }}
     >
       {children}
