@@ -78,12 +78,6 @@ export const TodoContextProvider = ({ children }) => {
         })
         .eq("id", id)
         .select();
-        // console.log(todo);
-        // console.log(data);
-
-        // const todoFind = todo.find(item => item.id == data[0].id)
-
-        // console.log(todoFind);
 
         todo.map((items) => {
           if (items.id == data[0].id) {

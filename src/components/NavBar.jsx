@@ -1,33 +1,31 @@
 import React from "react";
 import { supabase } from "../api/client";
+import { Container, NavDropdown, Navbar, Nav } from "react-bootstrap";
 
-export const NavBar = () => {
+export const NavBar = ({ userEmail }) => {
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          TodoList
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <Navbar
+      expand="lg"
+      bg="dark"
+      data-bs-theme="dark"
+      className="bg-body-tertiary mb-5"
+    >
+      <Container>
+        <Navbar.Brand href="#home">Todo List</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="d-flex justify-content-end"
         >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <a className="nav-link fw-bold" 
-            onClick={() => supabase.auth.signOut()}>
-              Log Out
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
+          <Nav>
+            <NavDropdown title={userEmail} id="basic-nav-dropdown">
+              <NavDropdown.Item onClick={() => supabase.auth.signOut()}>
+                Log Out
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
