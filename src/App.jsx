@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "./api/client";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { TodoContextProvider } from "./context/TodoContext";
@@ -10,8 +10,13 @@ import { NavBar } from "./components/NavBar";
 export const App = () => {
   const navigate = useNavigate();
 
+  const [sessionActive, setSessionSctive] = useState(null);
+  const [userEmail, setUserEmail] = useState("")
+
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, sessin) => {
+      setSessionSctive(sessin);
+      setUserEmail(sessin.user.email)
       if (!sessin) {
         navigate("/login");
       } else {
@@ -22,17 +27,15 @@ export const App = () => {
 
   return (
     <>
-      <NavBar />
+      {!sessionActive ? "" : <NavBar userEmail={userEmail} />}
       <div className="container">
-        <div className="mt-5">
-          <TodoContextProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </TodoContextProvider>
-        </div>
+        <TodoContextProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TodoContextProvider>
       </div>
     </>
   );
